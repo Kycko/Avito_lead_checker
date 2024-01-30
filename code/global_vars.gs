@@ -18,7 +18,8 @@ function Ginit_RVcur() {
         TBL: {                  // считанные с листа таблицы
             init     : {},      // {size:{rows:, cols:}, title:num, table:TBL, bg_colors:TBL}
             cur      : {}       //                      {title:num, table:TBL, bg_colors:TBL}
-        }
+        },
+        CT           : []       // cell table [[{value:val, bg_color:color, note:note}, ...], ...]
     }
 }
 

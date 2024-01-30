@@ -28,7 +28,7 @@ function SH_read_cur_sheet(RV, range, toTD) {
     SH_read_init_tables(RV.cur.TBL, range);
 
     if (toTD) {SPEC_cur_toTD(RV.cur)}
-    else      {CO_range_toCT(RV)}
+    else      {CO_range_toCT(RV.cur)}
 }
 function SH_read_init_tables(TBL, range) {
     TBL.init.table     = SH_get_values(range);
