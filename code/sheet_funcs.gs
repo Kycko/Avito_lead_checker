@@ -8,7 +8,7 @@ function SH_get_active_range(cur_sheet=null) {
 }
 
 // чтение таблиц
-function SH_read_all_sheets_data(RV, type, range, toTD) {
+function SH_read_all(RV, type, range, toTD) {
     // функцию можно использовать в т. ч. чтобы прочитать только RV.cur
     // при range=null загружаем весь лист, иначе передаём объект range текущего листа
     if (!Object.keys(RV).includes('cur')) {SH_read_cur_sheet(RV, range, toTD)}
@@ -27,8 +27,8 @@ function SH_read_cur_sheet(RV, range, toTD) {
     }
     SH_read_init_tables(RV.cur.TBL, range);
 
-    if (toTD) {SPEC_cur_toTD  (RV.cur)}
-    else      {SPEC_range_toTD(RV)}
+    if (toTD) {SPEC_cur_toTD(RV.cur)}
+    else      {CO_range_toCT(RV)}
 }
 function SH_read_init_tables(TBL, range) {
     TBL.init.table     = SH_get_values(range);

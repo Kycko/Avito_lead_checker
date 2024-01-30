@@ -1,12 +1,12 @@
 // функции SPEC предназначены для очень узкоспециализированных задач, В ОСНОВНОМ ДЛЯ ОБРАБОТКИ DATA.CUR
 
 // преобразование таблиц в словари
-function SPEC_cur_toTD(Rcur) {
-    let table_obj = Rcur.TBL.cur;
-    table_obj.table     = TBL_rotate(table_obj.table    .slice(table_obj.title));
-    table_obj.bg_colors = TBL_rotate(table_obj.bg_colors.slice(table_obj.title));
-    for (let r=0; r < table_obj.table.length; r++) {
-        Rcur.TD.unk[r] = TC_init_from_lists(Rcur.table[r], Rcur.bg_colors[r]);
-        Rcur.TD.unk[r].init_pos = r;
+function SPEC_cur_toTD(RVcur) {
+    let Tobj = RVcur.TBL.cur;    // Tobj = table object
+    Tobj.table     = TBL_rotate(Tobj.table    .slice(Tobj.title));
+    Tobj.bg_colors = TBL_rotate(Tobj.bg_colors.slice(Tobj.title));
+    for (let r=0; r < Tobj.table.length; r++) {
+        RVcur.TD.unk[r] = TC_init_from_lists({value: Tobj.table[r], bg_color: Tobj.bg_colors[r]});
+        RVcur.TD.unk[r].init_pos = r;
     }
 }

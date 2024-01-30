@@ -13,15 +13,12 @@ function TC_init() {
 }
 function TC_init_from_lists(lists_dict) {
     // lists_dict – словарь {value:[], bg_color:[], note:[]}; можно передавать без любых ключей
-    let      keys = Object.keys(lists_dict);
-    let lists_len = []; // для сверки длин списков
-    let     final = TC_init();
-
-    for (let key of keys) {
-        lists_len.push(lists_dict[key].length);
+    let final = TC_init();
+    for (let key of Object.keys(lists_dict)) {
         final.title[key] = lists_dict[key].shift(); // .shift() удаляет первый элемент и возвращает его
     }
-    if (!LIST_check_all_values_equal_non_str(lists_len, lists_len[0])) {LOG('TC_init_diff_len')}
+    if (!LIST_check_length_equal(Object.values(lists_dict))) {LOG('TC_init_diff_len')}
 
-    final.cells = CL_init_from_lists(lists_dict);
+    final.cells = CO_init_from_lists(lists_dict);
+    return final;
 }

@@ -4,8 +4,8 @@ function MM_launch_all(RV=Ginit_RV()) {MM_sub_main('launch_all', null, RV)}
 // служебные функции
 function MM_sub_main(type, range=null, RV=Ginit_RV(), toTD=true, only_blank=false) {
     // toTD – преобразовать прочитанное в table-dict
-    if (range) {range = SH_get_active_range()}      // запоминаем range, если передан range=true
-    SH_read_all_sheets_data(RV, type, range, toTD); // читаем все данные
+    if (range) {range = SH_get_active_range()}  // запоминаем range, если передан range=true
+    SH_read_all(RV, type, range, toTD);         // читаем все данные
 
     // запускаем основной алгоритм
     if (checker === 'launch_all') {checker = 'empty_req'}   // только для launch_all
