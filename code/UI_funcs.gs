@@ -11,6 +11,6 @@ function onOpen() {
             }
             menu.addToUi();
         }
-        else {Logger.log(SL_logger('onOpen_no_key'), key)}
+        else {LOG('onOpen_no_key', key)}
     }
 }

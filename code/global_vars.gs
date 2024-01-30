@@ -10,7 +10,7 @@ function Ginit_RVcur() {
     return {
         sheet        : null,    // рабочий лист
         vert_changed : false,   // для показа уведомлений об изменении вертикали
-        TD: {                   // все объекты table-dict
+        TD: {                   // все объекты table-dict (таблицы-словари)
             main     : {},      //   распознанные столбцы в виде table-dict
             unk      : {},      // нераспознанные столбцы в виде table-dict
             errors   : {},      // шапка для подсчёта ошибок и уникальных

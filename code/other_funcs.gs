@@ -4,3 +4,9 @@ function get_IB(type, index) {
     if (type === 'index') {return index}
     else                  {return index >= 0}
 }
+function LOG(type, extra=null) {
+    // в extra можно передать любые необходимые доп. данные
+    let msg = SL_logger(type);
+    if (extra !== null) {msg = msg.replace('$$1', extra)}
+    Logger.log(msg);
+}
