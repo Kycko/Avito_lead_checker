@@ -1,5 +1,13 @@
 // функции SPEC предназначены для очень узкоспециализированных задач, В ОСНОВНОМ ДЛЯ ОБРАБОТКИ RV.CUR
 
+function SPEC_copy_TBL_init_to_cur(TBL) {
+    // восстанавливает RV.cur.TBL.cur из RV.cur.TBL.init
+    // deep copy без взаимосвязи; size не нужен, т. к. TBL.cur можно изменять
+    for (let key of Object.keys(TBL.init)) {
+        if (key !== 'size') {TBL.cur[key] = TBL.init[key]}
+    }
+}
+
 // преобразование таблиц в словари
 function SPEC_cur_toTD(RVcur) {
     let Tobj = RVcur.TBL.cur;    // Tobj = table object
