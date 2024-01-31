@@ -11,7 +11,7 @@ function SH_get_active_range(cur_sheet=null) {
 function SH_read_all(RV, type, range, toTD) {
     // функцию можно использовать в т. ч. чтобы прочитать только RV.cur
     // при range=null загружаем весь лист, иначе передаём объект range текущего листа
-    if (!Object.keys(RV).includes('cur')) {SH_read_cur_sheet(RV, range, toTD)}
+    if (!Object.keys(RV).includes('cur')) {SH_read_cur(RV, range, toTD)}
 
     let req_sheets = Greq_sheets(type);
     for (let item of req_sheets.sheets) {
@@ -19,7 +19,7 @@ function SH_read_all(RV, type, range, toTD) {
     }
     if (RV.NA_libs.length) {UI_no_sheets_msg(RV.NA_libs, req_sheets.error)}
 }
-function SH_read_cur_sheet(RV, range, toTD) {
+function SH_read_cur(RV, range, toTD) {
     RV.cur = Ginit_RVcur();
     if (range === null) {
         RV.cur.sheet = SpreadsheetApp.getActiveSheet();
@@ -28,7 +28,10 @@ function SH_read_cur_sheet(RV, range, toTD) {
     SH_read_init_tables(RV.cur.TBL, range);
 
     if (toTD) {SPEC_cur_toTD(RV.cur)}
-    else      {CO_range_toCT(RV.cur)}
+    else {
+        let  init = RV.cur.TBL.init;
+        RV.cur.CT = COt_from_tables({value: init.table, bg_color: init.bg_colors});
+    }
 }
 function SH_read_init_tables(TBL, range) {
     TBL.init.table     = SH_get_values(range);

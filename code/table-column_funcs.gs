@@ -19,6 +19,6 @@ function TC_init_from_lists(lists_dict) {
     }
     if (!LIST_check_length_equal(Object.values(lists_dict))) {LOG('TC_init_diff_len')}
 
-    final.cells = COlist_from_lists(lists_dict);
+    final.cells = COl_from_lists(lists_dict);
     return final;
 }
