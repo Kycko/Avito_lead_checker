@@ -1,14 +1,13 @@
-// CO = cell object {value:val, bg_color:color, note:note}
-// COl = cell_object list []
-// COt = cell_object table[[]]
+// CO = cell object, COl = cell_object list[], COt = cell_object table[[]]
 
 // создание объектов
+function COinit() {return {value: '', bg_color: null, note: null, error: false}}
 function COl_from_lists(lists_dict) {
     // lists_dict – словарь {value:[], bg_color:[], note:[]}; можно передавать без любых ключей
     let final = [];
     let  keys = Object.keys(lists_dict);
     for (let i=0; i < lists_dict[keys[0]].length; i++) {
-        final.push({value: '', bg_color: null, note: null});
+        final.push(COinit());
         for (let key of keys) {final[i][key] = lists_dict[key][i]}
     }
     return final;

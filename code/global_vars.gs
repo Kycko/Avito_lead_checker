@@ -11,20 +11,21 @@ function Ginit_RVcur() {
         sheet        : null,    // рабочий лист
         vert_changed : false,   // для показа уведомлений об изменении вертикали
         TD: {                   // все объекты table-dict (таблицы-словари)
-            main     : {},      //   распознанные столбцы в виде table-dict
-            unk      : {},      // нераспознанные столбцы в виде table-dict
+            main     : {},      //   распознанные столбцы{title:{}, cells:[], init_pos:x} в виде table-dict
+            unk      : {},      // нераспознанные столбцы{title:{}, cells:[], init_pos:x} в виде table-dict
             errors   : {},      // шапка для подсчёта ошибок и уникальных
         },
         TBL: {                  // считанные с листа таблицы
             init     : {},      // {size:{rows:, cols:}, title:num, table:TBL, bg_colors:TBL}
             cur      : {}       //                      {title:num, table:TBL, bg_colors:TBL}
         },
-        CT           : []       // cell table [[{value:val, bg_color:color, note:note}, ...], ...]
+        CT           : []       // cell table [[{value:, bg_color:, note:, error:}, ...], ...]
     }
 }
 
 // основные типы
 function Gtypes() {
+    // columns НУЖЕН ВСЕГДА, когда преобразуем SPEC_cur_toTD()
     let dict = {
         launch_all: {
             read_sheets : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg']

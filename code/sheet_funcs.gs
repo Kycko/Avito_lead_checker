@@ -37,8 +37,8 @@ function SH_read_init_tables(TBL, range) {
     TBL.init.table     = SH_get_values(range);
     TBL.init.bg_colors = range.getBackgrounds();
     TBL.init.title     = TBL_search_title_row(TBL.init.table);
-    TBL.init.size = {rows : TBL.init.table   .length,
-                     cols : TBL.init.table[0].length}
+    TBL.init.size      = {rows : TBL.init.table   .length,
+                          cols : TBL.init.table[0].length}
 
     SPEC_copy_TBL_init_to_cur(TBL);
 }
