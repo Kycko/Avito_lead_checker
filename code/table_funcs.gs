@@ -13,7 +13,7 @@ function TBL_search_title_row(table) {
 }
 
 // преобразование всей таблицы
-function TBL_rotate(old) {
+function TBLrotate(old) {
     let rotated = [];
     for (let cell of old[0]) {rotated.push([])}
     for (let r=0; r < old.length; r++) {

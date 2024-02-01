@@ -35,8 +35,7 @@ function SH_readLib(RV, type) {
     if (sheet === null) {RV.libs.NSF.push(type)}
     else {
         let     table = SH_getValues(SH_get_full_range(sheet));
-        RV.libs[type] = LIBinit(table, type, sheet.getFrozenRows());
-        if (type === 'regions') {RV.region_list = RV.region_list.concat(LIST_rm_doubles(RV[type].region))}
+        LIBinit(RV.libs, table, type, sheet.getFrozenRows());
     }
 }
 function SH_readCur(RV, range, toTD) {

@@ -7,8 +7,8 @@ function Ginit_RV() {
         },
         SD   : null,                        // SD = show dialogues
         libs : {                            // библиотеки
-            NSF         : [],               // no sheet found: список отсутствующих листов
-            region_list : ['Россия']}       // список регионов, будет считан из lib.regions
+            NSF     : [],                   // no sheet found: список отсутствующих листов
+            regList : ['Россия']}           // список регионов, будет считан из lib.regions
     }
 }
 function Ginit_RVcur(ss) {
@@ -50,4 +50,27 @@ function Gsheets(type) {
         autocorr : '[script] автоисправления{{x:y}}'
     }
     return dict[type];
+}
+
+// вспомогательные словари
+function Gkeys_autocorr_and_sugg() {
+    return  {
+        'название столбца'                      : 'col_title',
+        'регион/город'                          : 'region',
+        'категория'                             : 'cat',
+        'вертикаль'                             : 'vert',
+        'источник'                              : 'source',
+        'название компании'                     : 'company',
+        'фамилия'                               : 'p_family',
+        'имя'                                   : 'p_name',
+        'отчество'                              : 'p_otch',
+        'должность'                             : 'job_title',
+        'телефон'                               : 'phone',
+        'e-mail'                                : 'mail',
+        'сайт'                                  : 'website',
+        'статус'                                : 'lead_status',
+        'ответственный'                         : 'lead_owner',
+        'доступен для всех'                     : 'lead_available',
+        'статус посещения мероприятия клиентом' : 'event_visit_status'
+    }
 }

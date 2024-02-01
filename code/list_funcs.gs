@@ -20,3 +20,12 @@ function LIST_check_length_equal(list_of_lists) {
     }
     return true;
 }
+
+// изменение
+function LIST_rm_doubles(oldList) {
+    let newList = [];
+    for (let item of oldList) {
+        if (!newList.includes(item)) {newList.push(item)}
+    }
+    return newList;
+}
