@@ -1,14 +1,20 @@
 // инициализация RV (root vars) = {cur: {}, libs: {}, SD: null/true/false}
 function Ginit_RV() {
     return {
+        GTO  : {                            // Google tables objects
+            ss: SpreadsheetApp.getActive(), // ss = SpreadSheet
+            ui: SpreadsheetApp.getUi()
+        },
         SD   : null,                        // SD = show dialogues
-        libs : {region_list: ['Россия']}    // библиотеки+список регионов, будет считан из lib.regions
+        libs : {                            // библиотеки
+            NSF         : [],               // no sheet found: список отсутствующих листов
+            region_list : ['Россия']}       // список регионов, будет считан из lib.regions
     }
 }
-function Ginit_RVcur() {
+function Ginit_RVcur(ss) {
     // этот словарь будет записан в RV.cur (текущие данные, которые мы будем изменять)
     return {
-        sheet        : null,    // рабочий лист
+        sheet        : ss.getActiveSheet(), // рабочий лист
         vert_changed : false,   // для показа уведомлений об изменении вертикали
         TD: {                   // все объекты table-dict (таблицы-словари)
             main     : {},      //   распознанные столбцы{title:{}, cells:[], init_pos:x} в виде table-dict
@@ -24,11 +30,12 @@ function Ginit_RVcur() {
 }
 
 // основные типы
-function Gtypes() {
+function Gtypes(type) {
     // columns НУЖЕН ВСЕГДА, когда преобразуем SPEC_cur_toTD()
     let dict = {
         launch_all: {
             read_sheets : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg']
         }
     }
+    return dict[type];
 }

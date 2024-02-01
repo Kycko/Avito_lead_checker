@@ -2,8 +2,8 @@
 function SH_get_full_range(sheet) {
     return sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns());
 }
-function SH_get_active_range(cur_sheet=null) {
-    if (cur_sheet === null) {cur_sheet = SpreadsheetApp.getActiveSheet()}
+function SH_get_active_range(ss, cur_sheet=null) {
+    if (cur_sheet === null) {cur_sheet = ss.getActiveSheet()}
     return cur_sheet.getActiveRange();
 }
 
