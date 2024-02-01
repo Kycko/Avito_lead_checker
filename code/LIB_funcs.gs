@@ -23,8 +23,8 @@ function LIBinit(RVlibs, table, type, pinned) {
     if      (type === 'columns')                  {RVlibs[type] = LIBinit_columns  (table, pinned)}
     else if (type === 'sources')                  {RVlibs[type] = LIBinit_list     (table, pinned)}
     else if (type === 'log_cat')                  {RVlibs[type] = LIBinit_key_value(table, pinned)}
-    else if (['autocorr', 'sugg'].includes(type)) {RVlibs[type] = LIBinit_AC_sugg  (table, pinned)}
-    else if (['regions', 'cat'].includes(type)) {
+    else if (['autocorr', 'sugg'].includes(type)) {RVlibs[type] = LIBinit_AC_sugg  (table, pinned, type)}
+    else if (['regions',  'cat'] .includes(type)) {
         RVlibs[type] = LIBinit_default(table, pinned);
         if (type === 'regions') {RVlibs.regList = RVlibs.regList.concat(LIST_rm_doubles(RVlibs[type].region))}
     }
@@ -43,26 +43,23 @@ function LIBinit_key_value(table, pinned) {
     return final;
 }
 function LIBinit_list   (table, pinned) {return TBLrotate(table.slice(pinned))[0]}
-function LIBinit_AC_sugg(table, pinned) {
-    
-
-
-
-    let keys_obj = Gautocorr_and_sugg_keys();
-    var    final = {};
+function LIBinit_AC_sugg(table, pinned, type) {
+    let  keysObj = Gkeys_AC_sugg();
+    let strTypes = Object.keys(keysObj);
+    let    final = {};
     for (let row of table.slice(pinned)) {
-        if (Object.keys(keys_obj).includes(row[0])) {
-            let root = keys_obj[row[0]];
-            row[1]   = row[1].toLowerCase();
-            if (!Object.keys(final).includes(root)) {final[root] = {}}
+        if (strTypes.includes(row[0])) {
+            let libKey = keysObj[row[0]];
+            row[1]     = row[1].toLowerCase();
+            if (!Object.keys(final).includes(libKey)) {final[libKey] = {}}
 
-            if (type === 'autocorr') {final[root][row[1]] = row[2]}
+            if (type === 'autocorr') {final[libKey][row[1]] = row[2]}
             else {
-                if (Object.keys(final[root]).includes(row[1])) {final[root][row[1]].push(row[2])}
-                else                                           {final[root][row[1]] =   [row[2]]}
+                if (Object.keys(final[libKey]).includes(row[1])) {final[libKey][row[1]].push(row[2])}
+                else                                             {final[libKey][row[1]] =   [row[2]]}
             }
         }
-        else {Logger.log(SL_logger('autocorr_sugg_no_key'), row[0], Gsheet_names()[type])}
+        else {LOG('AC_sugg_noKey', {key: row[0], sheet: Gsheets(type)})}
     }
     return final;
 }

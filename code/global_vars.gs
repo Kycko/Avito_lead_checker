@@ -17,15 +17,15 @@ function Ginit_RVcur(ss) {
         sheet        : ss.getActiveSheet(), // рабочий лист
         vert_changed : false,   // для показа уведомлений об изменении вертикали
         TD: {                   // все объекты table-dict (таблицы-словари)
-            main     : {},      //   распознанные столбцы{title:{}, cells:[], init_pos:x} в виде table-dict
-            unk      : {},      // нераспознанные столбцы{title:{}, cells:[], init_pos:x} в виде table-dict
+            main     : {},      //   распознанные столбцы{title:{}, cells:[], initPos:x} в виде table-dict
+            unk      : {},      // нераспознанные столбцы{title:{}, cells:[], initPos:x} в виде table-dict
             errors   : {},      // шапка для подсчёта ошибок и уникальных
         },
         TBL: {                  // считанные с листа таблицы
-            init     : {},      // {size:{rows:, cols:}, title:num, table:TBL, bg_colors:TBL}
-            cur      : {}       //                      {title:num, table:TBL, bg_colors:TBL}
+            init     : {},      // {size:{rows:, cols:}, title:num, table:TBL, bgColors:TBL}
+            cur      : {}       //                      {title:num, table:TBL, bgColors:TBL}
         },
-        CT           : []       // cell table [[{value:, bg_color:, note:, error:}, ...], ...]
+        CT           : []       // cell table [[{value:, bgColor:, note:, error:}, ...], ...]
     }
 }
 
@@ -33,8 +33,9 @@ function Ginit_RVcur(ss) {
 function Gtypes(type) {
     // columns НУЖЕН ВСЕГДА, когда преобразуем SPEC_cur_toTD()
     let dict = {
-        launch_all: {
-            read_sheets : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg']
+        launchAll: {
+            readSheets     : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg'],
+            noSheets_title : 'Невозможно выполнить некоторые проверки'
         }
     }
     return dict[type];
@@ -53,7 +54,7 @@ function Gsheets(type) {
 }
 
 // вспомогательные словари
-function Gkeys_autocorr_and_sugg() {
+function Gkeys_AC_sugg() {
     return  {
         'название столбца'                      : 'col_title',
         'регион/город'                          : 'region',

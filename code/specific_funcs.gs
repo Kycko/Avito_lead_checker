@@ -11,10 +11,10 @@ function SPEC_accept_loaded_titles(RVcurTD) {
 function SPEC_cur_toTD(RVcur) {
     let Tobj = RVcur.TBL.cur;    // Tobj = table object
     Tobj.table     = TBLrotate(Tobj.table    .slice(Tobj.title));
-    Tobj.bg_colors = TBLrotate(Tobj.bg_colors.slice(Tobj.title));
+    Tobj.bgColors = TBLrotate(Tobj.bgColors.slice(Tobj.title));
     for (let r=0; r < Tobj.table.length; r++) {
-        RVcur.TD.unk[r] = TC_init_from_lists({value: Tobj.table[r], bg_color: Tobj.bg_colors[r]});
-        RVcur.TD.unk[r].init_pos = r;
+        RVcur.TD.unk[r] = TCinit_fromLists({value: Tobj.table[r], bgColor: Tobj.bgColors[r]});
+        RVcur.TD.unk[r].initPos = r;
     }
 }
 function SPEC_copy_TBL_init_toCur(TBL) {

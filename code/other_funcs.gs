@@ -6,7 +6,10 @@ function get_IB(type, index) {
 }
 function LOG(type, extra=null) {
     // в extra можно передать любые необходимые доп. данные
-    let msg = SL_logger(type);
-    if (extra !== null) {msg = msg.replace('$$1', extra)}
+    let msg = SLlogger(type);
+
+    if (['autocorr', 'sugg'].includes(type)) {msg = msg.replace('$$1', extra.key).replace('$$2', extra.sheet)}
+    else if (extra !== null)                 {msg = msg.replace('$$1', extra)}
+
     Logger.log(msg);
 }
