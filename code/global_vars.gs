@@ -29,13 +29,25 @@ function Ginit_RVcur(ss) {
     }
 }
 
-// основные типы
+// основные типы и листы
 function Gtypes(type) {
     // columns НУЖЕН ВСЕГДА, когда преобразуем SPEC_cur_toTD()
     let dict = {
         launch_all: {
             read_sheets : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg']
         }
+    }
+    return dict[type];
+}
+function Gsheets(type) {
+    let dict = {
+        columns  : '[script] столбцы{}',
+        regions  : '[script] регионы и города{[],[],[]}',
+        cat      : '[script] категории{[],[]}',
+        log_cat  : '[script] logical category{}',
+        sources  : '[script] источники[]',
+        sugg     : '[script] предложения исправлений{{x:[]}}',  // sugg = suggestions
+        autocorr : '[script] автоисправления{{x:y}}'
     }
     return dict[type];
 }
