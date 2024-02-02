@@ -23,3 +23,18 @@ function COt_fromTables(tables) {
     }
     return final;
 }
+
+// преобразование в таблицы для записи на лист
+function COt_toTables(COtable, types=['value', 'bgColor', 'note']) {
+    let final = {};
+    for (let type of types) {
+        final[type] = [];
+        for (let r=0; r < COtable.length; r++) {
+            final[type].push([]);
+            for (let c=0; c < COtable[r].length; c++) {
+                final[type][r].push(COtable[r][c][type]);
+            }
+        }
+    }
+    return final;
+}

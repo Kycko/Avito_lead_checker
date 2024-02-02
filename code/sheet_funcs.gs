@@ -35,7 +35,7 @@ function SH_readLib(RV, type) {
 }
 function SH_readCur(RV, range, toTD) {
     RV.cur = Ginit_RVcur(RV.GTO.ss);
-    if (range === null) {range = SH_get_fullRange(RV.GTO.ss, RV.cur.sheet)}
+    if (range === null) {range = SH_get_fullRange(RV.cur.sheet)}
     SH_read_initTables(RV.cur.TBL, range);
 
     if (toTD) {SPEC_cur_toTD(RV.cur)}
@@ -45,11 +45,11 @@ function SH_readCur(RV, range, toTD) {
     }
 }
 function SH_read_initTables(TBL, range) {
-    TBL.init.table     = SH_getValues(range);
+    TBL.init.table    = SH_getValues(range);
     TBL.init.bgColors = range.getBackgrounds();
-    TBL.init.title     = TBL_search_title_row(TBL.init.table);
-    TBL.init.size      = {rows : TBL.init.table   .length,
-                          cols : TBL.init.table[0].length}
+    TBL.init.title    = TBL_search_title_row(TBL.init.table);
+    TBL.init.size     = {rows : TBL.init.table   .length,
+                         cols : TBL.init.table[0].length}
 
     SPEC_copy_TBL_init_toCur(TBL);
 }
@@ -60,3 +60,40 @@ function SH_getValues(range) {
     TBL_toStrings(table);
     return table;
 }
+
+// запись в таблицы
+function SH_writeCur(RV, range=null, fromTD, types=['value', 'bgColor', 'note']) {
+    if (fromTD) {var tables = SPEC_get_mergedTables(RV, types)}
+    else        {var tables = COt_toTables  (RV.cur.CT, types)}
+    if (range === null) {
+        let any_table = Object.values(tables)[0];
+        let      size = {rows : any_table   .length,
+                         cols : any_table[0].length}
+        SH_fitSize(RV, size);
+        range = RV.cur.sheet.getRange(1, 1, size.rows, size.cols);
+    }
+
+    for (let type of types) {
+        if      (type === 'value')   {SH_set_rangeValues(tables[type], range)}
+        else if (type === 'bgColor') {SH_hlCells        (tables[type], range)}
+        else if (type === 'note')    {SH_setNotes       (tables[type], range)}
+    }
+}
+function SH_set_rangeValues(table, range) {range.setValues(table)}
+
+// форматирование (стиль) таблиц
+function SH_fitSize(RV, newSize) {
+    let initial = RV.cur.TBL.init.size;
+
+    // rows
+    let diff = newSize.rows - initial.rows;
+    if      (diff > 0) {RV.cur.sheet.insertRowsAfter(initial.rows,    diff)}
+    else if (diff < 0) {RV.cur.sheet.deleteRows     (newSize.rows+1, -diff)}
+
+    // columns
+    diff = newSize.cols - initial.cols;
+    if      (diff > 0) {RV.cur.sheet.insertColumnsAfter(initial.cols,    diff)}
+    else if (diff < 0) {RV.cur.sheet.deleteColumns     (newSize.cols+1, -diff)}
+}
+function SH_hlCells (colorTable, range) {range.setBackgrounds(colorTable)}
+function SH_setNotes(notesTable, range) {range.setNotes      (notesTable)}

@@ -31,7 +31,9 @@ function UI_showMsg(ui, msg, type=null) {
         return ui.alert(msg.title, msg.text, buttons) === ui.Button.YES;
     }
 }
-function UI_show_fromSL(SLkey, type=null) {return UI_showMsg(SL_UImessages(SLkey), type)}
+function UI_msg_fromSL  (ui,    SLkey, type=null) {return UI_showMsg(ui, SL_UImessages(SLkey), type)}
+function UI_showToast   (GTOss, msg,   time=6)    {GTOss.toast (msg.text, msg.title,    time)}
+function UI_toast_fromSL(GTOss, SLkey, time=6)    {UI_showToast(GTOss, SLtoasts(SLkey), time)}
 
 // узконаправленные
 function UI_noSheets_msg(GTOui, NAsheets, errorTitle) {

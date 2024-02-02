@@ -22,7 +22,7 @@ function LIST_check_length_equal(list_of_lists) {
 }
 
 // изменение
-function LIST_rm_doubles(oldList) {
+function LIST_rmDoubles(oldList) {
     let newList = [];
     for (let item of oldList) {
         if (!newList.includes(item)) {newList.push(item)}

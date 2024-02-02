@@ -14,18 +14,17 @@ function Ginit_RV() {
 function Ginit_RVcur(ss) {
     // этот словарь будет записан в RV.cur (текущие данные, которые мы будем изменять)
     return {
-        sheet        : ss.getActiveSheet(), // рабочий лист
-        vert_changed : false,   // для показа уведомлений об изменении вертикали
+        sheet       : ss.getActiveSheet(),  // рабочий лист
+        vertChanged : false,    // для показа уведомлений об изменении вертикали
         TD: {                   // все объекты table-dict (таблицы-словари)
-            main     : {},      //   распознанные столбцы{title:{}, cells:[], initPos:x} в виде table-dict
-            unk      : {},      // нераспознанные столбцы{title:{}, cells:[], initPos:x} в виде table-dict
-            errors   : {},      // шапка для подсчёта ошибок и уникальных
+            main    : {},       //   распознанные столбцы в виде table_column
+            unk     : []        // нераспознанные столбцы в виде table_column
         },
         TBL: {                  // считанные с листа таблицы
-            init     : {},      // {size:{rows:, cols:}, title:num, table:TBL, bgColors:TBL}
-            cur      : {}       //                      {title:num, table:TBL, bgColors:TBL}
+            init    : {},       // {size:{rows:, cols:}, title:num, table:TBL, bgColors:TBL}
+            cur     : {}        //                      {title:num, table:TBL, bgColors:TBL}
         },
-        CT           : []       // cell table [[{value:, bgColor:, note:, error:}, ...], ...]
+        CT          : []        // cell table [[{value:, bgColor:, note:, error:}, ...], ...]
     }
 }
 
@@ -45,7 +44,7 @@ function Gsheets(type) {
         columns  : '[script] столбцы{}',
         regions  : '[script] регионы и города{[],[],[]}',
         cat      : '[script] категории{[],[]}',
-        log_cat  : '[script] logical category{}',
+        logCat   : '[script] logical category{}',
         sources  : '[script] источники[]',
         sugg     : '[script] предложения исправлений{{x:[]}}',  // sugg = suggestions
         autocorr : '[script] автоисправления{{x:y}}'
@@ -57,7 +56,7 @@ function Gsheets(type) {
 function Gkeys_AC_sugg() {
     return  {
         'название столбца'                      : 'col_title',
-        'регион/город'                          : 'region',
+        'регион и город'                        : 'region',
         'категория'                             : 'cat',
         'вертикаль'                             : 'vert',
         'источник'                              : 'source',

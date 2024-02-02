@@ -22,11 +22,11 @@ function LIBready(RVlibs, reqs) {
 function LIBinit(RVlibs, table, type, pinned) {
     if      (type === 'columns')                  {RVlibs[type] = LIBinit_columns  (table, pinned)}
     else if (type === 'sources')                  {RVlibs[type] = LIBinit_list     (table, pinned)}
-    else if (type === 'log_cat')                  {RVlibs[type] = LIBinit_key_value(table, pinned)}
+    else if (type === 'logCat')                   {RVlibs[type] = LIBinit_key_value(table, pinned)}
     else if (['autocorr', 'sugg'].includes(type)) {RVlibs[type] = LIBinit_AC_sugg  (table, pinned, type)}
     else if (['regions',  'cat'] .includes(type)) {
         RVlibs[type] = LIBinit_default(table, pinned);
-        if (type === 'regions') {RVlibs.regList = RVlibs.regList.concat(LIST_rm_doubles(RVlibs[type].region))}
+        if (type === 'regions') {RVlibs.regList = RVlibs.regList.concat(LIST_rmDoubles(RVlibs[type].region))}
     }
 
 }
@@ -46,7 +46,9 @@ function LIBinit_list   (table, pinned) {return TBLrotate(table.slice(pinned))[0
 function LIBinit_AC_sugg(table, pinned, type) {
     let  keysObj = Gkeys_AC_sugg();
     let strTypes = Object.keys(keysObj);
+    let   NAkeys = [];
     let    final = {};
+
     for (let row of table.slice(pinned)) {
         if (strTypes.includes(row[0])) {
             let libKey = keysObj[row[0]];
@@ -59,8 +61,10 @@ function LIBinit_AC_sugg(table, pinned, type) {
                 else                                             {final[libKey][row[1]] =   [row[2]]}
             }
         }
-        else {LOG('AC_sugg_noKey', {key: row[0], sheet: Gsheets(type)})}
+        else if (!NAkeys.includes(row[0])) {NAkeys.push(row[0])}
     }
+
+    if (NAkeys.length) {LOG('AC_sugg_noKey', {keys: NAkeys, sheet: Gsheets(type)})}
     return final;
 }
 function LIBinit_columns(table, pinned) {
@@ -70,8 +74,8 @@ function LIBinit_columns(table, pinned) {
         final[row[0]] = {}
         for (let i=0; i < props.length; i++) {
             let value = row[i+1];
-            if      (['mandatory', 'text_wrapping'].includes(props[i])) {value = value === 'да'}
-            else if (['max_width', 'highlight_red'].includes(props[i])) {
+            if     (['mandatory', 'textWrapping'].includes(props[i])) {value = value === 'да'}
+            else if (['maxWidth', 'highlightRed'].includes(props[i])) {
                 if (value === 'нет') {value = null}
                 else                 {value = Number(value)}
             }
