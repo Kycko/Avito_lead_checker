@@ -22,8 +22,13 @@ function SLlogger(type) {
 function SL_UImessages(type) {
     const dict = {
         noSheets_msg: {
-             oneSheet  : 'Отсутствует лист:',
-            manySheets : 'Отсутствуют листы:'
+            titles: {
+                multi      : 'Невозможно выполнить некоторые проверки'
+            },
+            msg: {
+                 oneSheet  : 'Отсутствует лист:',
+                manySheets : 'Отсутствуют листы:'
+            }
         }
     }
     return dict[type];

@@ -30,11 +30,12 @@ function Ginit_RVcur(ss) {
 
 // основные типы и листы
 function Gtypes(type) {
-    // columns НУЖЕН ВСЕГДА, когда преобразуем SPEC_cur_toTD()
+    // библиотека columns НУЖНА ВСЕГДА, когда преобразуем SPEC_cur_toTD()
+    let NAtitles = SL_UImessages('noSheets_msg').titles;
     let dict = {
         launchAll: {
             readSheets     : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg'],
-            noSheets_title : 'Невозможно выполнить некоторые проверки'
+            noSheets_title : NAtitles.multi
         }
     }
     return dict[type];

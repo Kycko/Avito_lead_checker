@@ -37,10 +37,10 @@ function UI_toast_fromSL(GTOss, SLkey, time=6)    {UI_showToast(GTOss, SLtoasts(
 
 // узконаправленные
 function UI_noSheets_msg(GTOui, NAsheets, errorTitle) {
-    let SLobj = SL_UImessages('noSheets_msg');
-    if (NAsheets.length === 1) {var text = SLobj.oneSheet}
-    else                       {var text = SLobj.manySheets}
+    let SLobj = SL_UImessages('noSheets_msg').msg;
+    if  (NAsheets.length === 1) {var text  = SLobj.oneSheet}
+    else                        {var text  = SLobj.manySheets}
+    for (let sheet of NAsheets) {    text += '\n• ' + sheet}
 
-    for (let sheet of NAsheets) {text += '\n• ' + sheet}
     UI_showMsg(GTOui, {title: errorTitle, text: text});
 }
