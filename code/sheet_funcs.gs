@@ -13,20 +13,19 @@ function SH_readAll(RV, type, range, toTD) {
     // при range=null загружаем весь лист, иначе передаём объект range текущего листа
 
     // библиотеки
-    let NAsheets = [];
-    let  typeObj = Gtypes(type);
-    let   toRead = LIB_filter_toRead(RV.libs, typeObj.readSheets);
-    for (let lib of toRead) {
-        SH_readLib(RV, lib);
-        if (RV.libs.NSF.includes(lib)) {NAsheets.push(Gsheets(lib))}
-    }
-    if (NAsheets.length) {UI_noSheets_msg(RV.GTO.ui, NAsheets, typeObj.noSheets_title)}
+    const typeObj = Gtypes(type);
+    const  toRead = LIB_filter_toRead(RV.libs, typeObj.readSheets);
+    for (let lib of toRead) {SH_readLib(RV, lib)}
+    let reqLIB_ready = LIBready(RV.libs, typeObj.launchReqs);
 
     // активный лист
-    if (!Object.keys(RV).includes('cur')) {SH_readCur(RV, range, toTD)}
+    if (reqLIB_ready && !Object.keys(RV).includes('cur')) {SH_readCur(RV, range, toTD)}
+
+    if (RV.libs.NSF.length) {UI_noSheets_msg(RV, typeObj.noSheets_title, reqLIB_ready)}
+    return reqLIB_ready;
 }
 function SH_readLib(RV, type) {
-    let sheet = RV.GTO.ss.getSheetByName(Gsheets(type));
+    let sheet = RV.GTO.ss.getSheetByName(Gsheets()[type]);
     if (sheet === null) {RV.libs.NSF.push(type)}
     else {
         let table = SH_getValues(SH_get_fullRange(sheet));

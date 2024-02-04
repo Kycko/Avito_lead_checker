@@ -36,11 +36,17 @@ function UI_showToast   (GTOss, msg,   time=6)    {GTOss.toast (msg.text, msg.ti
 function UI_toast_fromSL(GTOss, SLkey, time=6)    {UI_showToast(GTOss, SLtoasts(SLkey), time)}
 
 // узконаправленные
-function UI_noSheets_msg(GTOui, NAsheets, errorTitle) {
-    let SLobj = SL_UImessages('noSheets_msg').msg;
-    if  (NAsheets.length === 1) {var text  = SLobj.oneSheet}
-    else                        {var text  = SLobj.manySheets}
-    for (let sheet of NAsheets) {    text += '\n• ' + sheet}
+function UI_noSheets_msg(RV, noSheets_title, reqLIB_ready) {
+    let sheetNames = Gsheets();
+    let      SLobj = SL_UImessages('noSheets_msg');
+    let   finalMsg = {};
 
-    UI_showMsg(GTOui, {title: errorTitle, text: text});
+    if (reqLIB_ready) {finalMsg.title =     noSheets_title}
+    else              {finalMsg.title = SLobj.noReqs_title}
+
+    if  (RV.libs.NSF.length === 1) {finalMsg.text  = SLobj.msg.oneSheet}
+    else                           {finalMsg.text  = SLobj.msg.manySheets}
+    for (let sheet of RV.libs.NSF) {finalMsg.text += '\n• ' + sheetNames[sheet]}
+
+    UI_showMsg(RV.GTO.ui, finalMsg);
 }

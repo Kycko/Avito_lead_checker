@@ -5,7 +5,11 @@ function MM_launchAll(RV=Ginit_RV()) {MMsub_main('launchAll', null, RV)}
 function MMsub_main(type, range=null, RV=Ginit_RV(), toTD=true, onlyBlank=false) {
     // toTD – преобразовать прочитанное в table-dict
     if (range) {range = SH_get_activeRange()}   // запоминаем range, если передан range=true
-    SH_readAll(RV, type, range, toTD);          // читаем все данные
+    if (SH_readAll(RV, type, range, toTD)) {
+        // записываем итог
+        SH_writeCur(RV, range, toTD);
+        if (RV.cur.vertChanged) {UI_toast_fromSL(RV.GTO.ss, 'vertChanged', 12)}
+    }
 
 /* 
     // запускаем основной алгоритм
@@ -17,8 +21,4 @@ function MMsub_main(type, range=null, RV=Ginit_RV(), toTD=true, onlyBlank=false)
         else                                    {RV.table   = SPEC_check_UD_range(RV.table, type, RV).table}
     }
     */
-   
-    // записываем итог
-    SH_writeCur(RV, range, toTD);
-    if (RV.cur.vertChanged) {UI_toast_fromSL(RV.GTO.ss, 'vertChanged', 12)}
 }

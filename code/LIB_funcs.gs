@@ -64,7 +64,7 @@ function LIBinit_AC_sugg(table, pinned, type) {
         else if (!NAkeys.includes(row[0])) {NAkeys.push(row[0])}
     }
 
-    if (NAkeys.length) {LOG('AC_sugg_noKey', {keys: NAkeys, sheet: Gsheets(type)})}
+    if (NAkeys.length) {LOG('AC_sugg_noKey', {keys: NAkeys, sheet: Gsheets()[type]})}
     return final;
 }
 function LIBinit_columns(table, pinned) {

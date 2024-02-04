@@ -31,17 +31,20 @@ function Ginit_RVcur(ss) {
 // основные типы и листы
 function Gtypes(type) {
     // библиотека columns НУЖНА ВСЕГДА, когда преобразуем SPEC_cur_toTD()
-    let NAtitles = SL_UImessages('noSheets_msg').titles;
+    // (для распознавания столбцов ещё на этапе чтения данных)
+    let NAtitles = SL_UImessages('noSheets_msg').NAsheets_titles;
+
     let dict = {
         launchAll: {
+            noSheets_title : NAtitles.multi,
             readSheets     : ['columns', 'regions', 'cat', 'sources', 'autocorr', 'sugg'],
-            noSheets_title : NAtitles.multi
+            launchReqs     : ['columns']    // что обязательно нужно для запуска алгоритма
         }
     }
     return dict[type];
 }
-function Gsheets(type) {
-    let dict = {
+function Gsheets() {
+    return {
         columns  : '[script] столбцы{}',
         regions  : '[script] регионы и города{[],[],[]}',
         cat      : '[script] категории{[],[]}',
@@ -50,7 +53,6 @@ function Gsheets(type) {
         sugg     : '[script] предложения исправлений{{x:[]}}',  // sugg = suggestions
         autocorr : '[script] автоисправления{{x:y}}'
     }
-    return dict[type];
 }
 
 // вспомогательные словари

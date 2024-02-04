@@ -22,7 +22,8 @@ function SLlogger(type) {
 function SL_UImessages(type) {
     const dict = {
         noSheets_msg: {
-            titles: {
+            noReqs_title   : 'Невозможно выполнить',
+            NAsheets_titles: {
                 multi      : 'Невозможно выполнить некоторые проверки'
             },
             msg: {
