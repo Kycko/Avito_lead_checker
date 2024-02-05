@@ -37,7 +37,10 @@ function SH_readCur(RV, range, toTD) {
     if (range === null) {range = SH_get_fullRange(RV.cur.sheet)}
     SH_read_initTables(RV.cur.TBL, range);
 
-    if (toTD) {SPEC_cur_toTD(RV.cur)}
+    if (toTD) {
+        SPEC_cur_toTD        (RV.cur);
+        SPEC_unk_toCur_onRead(RV);
+    }
     else {
         let  init = RV.cur.TBL.init;
         RV.cur.CT = COt_fromTables({value: init.table, bgColor: init.bgColors});
@@ -46,7 +49,7 @@ function SH_readCur(RV, range, toTD) {
 function SH_read_initTables(TBL, range) {
     TBL.init.table    = SH_getValues(range);
     TBL.init.bgColors = range.getBackgrounds();
-    TBL.init.title    = TBL_search_title_row(TBL.init.table);
+    TBL.init.title    = TBL_search_titleRow(TBL.init.table);
     TBL.init.size     = {rows : TBL.init.table   .length,
                          cols : TBL.init.table[0].length}
 

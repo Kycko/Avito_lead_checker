@@ -1,6 +1,6 @@
 /* 
-при full_text=true и lower=false можно использовать .includes() или .indexOf() вместо этих функций
-если full_text=false, возвращают ячейку, в которой только часть текста = txt
+при fullText=true и lower=false можно использовать .includes() или .indexOf() вместо этих функций
+если fullText=false, возвращают ячейку, в которой только часть текста = txt
 если lower=true, все строки будут сравниваться через .toLowerCase()
 
 function LIST_check_all_values_equal_non_str(list, value) {
@@ -19,6 +19,14 @@ function LIST_check_length_equal(list_of_lists) {
         if (list_of_lists[i].length !== first_len) {return false}
     }
     return true;
+}
+
+// поиск
+function LIST_inclStr(list, txt, fullText=true, lower=true) {
+    for (let item of list) {
+        if (STR_findSub(item, txt, 'bool', fullText, lower)) {return true}
+    }
+    return false;
 }
 
 // изменение

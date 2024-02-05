@@ -1,10 +1,56 @@
 // функции SPEC предназначены для очень узкоспециализированных задач, В ОСНОВНОМ ДЛЯ ОБРАБОТКИ RV.CUR
 
-// обработка столбцов
-function SPEC_accept_loaded_titles(RVcurTD) {
-    for (let col of RVcurTD.unk) {
-        col.title.value
+// общие
+function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
+    // objTable = таблица[[{value:x, bgColor:y, note:z},...],...]
+    // errors   = список[{value:x, r:row, c:col, fixed:true/false}]
+    let errors = [];
+
+    // autocorr и запись всех ошибок
+    for (let r=0; r < objTable.length; r++) {
+        for (let c=0; c < objTable[0].length; c++) {
+            let tempValue = objTable[r][c].value;
+
+            if (!justVerify) {tempValue = SPECautocorr(RV, type, tempValue)}
+
+            if (SPEC_validate_UD(RV, type, tempValue)) {
+                objTable[r][c].value    = tempValue;
+                objTable[r][c].bg_color = Gcolors().hl_light_green;
+                errors[r].push(null);
+            }
+            else {errors[r].push({value: objTable[r][c].value, fixed: false})}
+        }
     }
+
+    // предложение исправить вручную и запись исправлений
+    errors    = SPEC_ask_SD_and_sugg(RV, errors, type);
+    objTable = SPEC_finalize_errors(objTable,  errors);
+
+    return {SD: RV.SD, table: objTable};
+}
+
+// обработка столбцов
+function SPEC_unk_toCur_onRead(RV) {
+    let Tobjects = [];  // title objects
+    for (let TC of RV.cur.TD.unk) {Tobjects.push(TC.title)}
+
+    let result = SPEC_check_UDrange([Tobjects], 'colTitle', RV, true);
+    RV.SD    = result.SD;
+    for (let i=0; i < keys.length; i++) {
+        RV.unknown[keys[i]].title = result.table[0][i];
+        if (result.table[0][i].bg_color === Gcolors().hl_light_green) {RV = SPEC_accept_valid_column(RV, keys[i])}
+    }
+}
+
+// работа с ошибками
+function SPECautocorr(RV, type, from) {
+    if (type === 'region') {
+        // сперва в autocorr без изменений, и, если не будет найдено, ещё раз после изменений
+        let ACobj = LIB_getAutocorr(RV.autocorr, type, from);
+        if (ACobj.fixed) {return ACobj.value}
+        else             {from = STR_autocorr_city(RV, from)}
+    }
+    return LIB_getAutocorr(RV.autocorr, type, from).value;
 }
 
 // преобразование данных из Google-таблиц
@@ -33,8 +79,8 @@ function SPEC_get_mergedTables(RV, types=['value', 'bgColor', 'note']) {
     for (let type of types) {final[type] = []}
 
     // обработка TD.main и TD.unk
-    for (let key of order)         {SPECadd_TClists(RV.cur.TD.main[key], final, types)}
-    for (let col of RV.cur.TD.unk) {SPECadd_TClists(col,                 final, types)}
+    for (let key of order)         {SPEC_add_TClists(RV.cur.TD.main[key], final, types)}
+    for (let col of RV.cur.TD.unk) {SPEC_add_TClists(col,                 final, types)}
 
     for (let type of types) {final[type] = TBLrotate(final[type])}
     return final;
@@ -46,7 +92,7 @@ function SPEC_columnsOrder(libColumns, mainKeys) {
     }
     return final;
 }
-function SPECadd_TClists(TC, addTo, types) {
+function SPEC_add_TClists(TC, addTo, types) {
     let columns = TC_toList(TC, types);
     for (let type of types) {addTo[type].push(columns[type])}
 }

@@ -85,3 +85,12 @@ function LIBinit_columns(table, pinned) {
     }
     return final;
 }
+
+// исправление ошибок
+function LIB_getAutocorr(AClib, type, value) {
+    let lowValue = value.toLowerCase();
+    if (LIST_inclStr(Object.keys(AClib[type]), lowValue, true, false)) {
+        return {fixed: true, value: AClib[type][lowValue]}
+    }
+    else {return {fixed: false, value: value}}
+}

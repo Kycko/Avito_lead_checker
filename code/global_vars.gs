@@ -58,22 +58,22 @@ function Gsheets() {
 // вспомогательные словари
 function Gkeys_AC_sugg() {
     return  {
-        'название столбца'                      : 'col_title',
+        'название столбца'                      : 'colTitle',
         'регион и город'                        : 'region',
         'категория'                             : 'cat',
         'вертикаль'                             : 'vert',
         'источник'                              : 'source',
         'название компании'                     : 'company',
-        'фамилия'                               : 'p_family',
-        'имя'                                   : 'p_name',
-        'отчество'                              : 'p_otch',
-        'должность'                             : 'job_title',
+        'фамилия'                               : 'pFamily',
+        'имя'                                   : 'pName',
+        'отчество'                              : 'pOtch',
+        'должность'                             : 'jobTitle',
         'телефон'                               : 'phone',
         'e-mail'                                : 'mail',
         'сайт'                                  : 'website',
-        'статус'                                : 'lead_status',
-        'ответственный'                         : 'lead_owner',
-        'доступен для всех'                     : 'lead_available',
-        'статус посещения мероприятия клиентом' : 'event_visit_status'
+        'статус'                                : 'leadStatus',
+        'ответственный'                         : 'leadOwner',
+        'доступен для всех'                     : 'leadAvail',
+        'статус посещения мероприятия клиентом' : 'event_visitStatus'
     }
 }
