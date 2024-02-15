@@ -11,9 +11,9 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
         for (let c=0; c < objTable[0].length; c++) {
             let tempValue = objTable[r][c].value;
 
-            if (!justVerify) {tempValue = SPECautocorr(RV, type, tempValue)}
+            if (!justVerify) {tempValue = SPECautocorr(RV.libs, type, tempValue)}
 
-            if (SPEC_validate_UD(RV, type, tempValue)) {
+            if (SPEC_validateUD(RV.libs, type, tempValue)) {
                 objTable[r][c].value    = tempValue;
                 objTable[r][c].bg_color = Gcolors().hl_light_green;
                 errors[r].push(null);
@@ -43,14 +43,22 @@ function SPEC_unk_toCur_onRead(RV) {
 }
 
 // работа с ошибками
-function SPECautocorr(RV, type, from) {
+function SPECautocorr(RVlibs, type, from) {
     if (type === 'region') {
         // сперва в autocorr без изменений, и, если не будет найдено, ещё раз после изменений
-        let ACobj = LIB_getAutocorr(RV.autocorr, type, from);
+        let ACobj = LIB_getAutocorr(RVlibs.autocorr, type, from);
         if (ACobj.fixed) {return ACobj.value}
-        else             {from = STR_autocorr_city(RV, from)}
+        else             {from = STR_autocorrCity(RVlibs, from)}
     }
-    return LIB_getAutocorr(RV.autocorr, type, from).value;
+    return LIB_getAutocorr(RVlibs.autocorr, type, from).value;
+}
+function SPEC_validateUD(RVlibs, type, value, extra=null) {
+    // в extra можно передать любые необходимые доп. данные
+    let valObj = G_valTypes(type);
+    if (valObj.readLib) {extra = LIB_get_validationList(RVlibs, type)}
+
+    if (valObj.checkList) {return LIST_inclStr(extra, value)}   // СДЕЛАТЬ ПОД ПРАВИЛЬНЫЕ СТРОЧНЫЕ/ПРОПИСНЫЕ
+    else                                {return null}
 }
 
 // преобразование данных из Google-таблиц

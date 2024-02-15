@@ -94,3 +94,15 @@ function LIB_getAutocorr(AClib, type, value) {
     }
     else {return {fixed: false, value: value}}
 }
+function LIB_get_validationList(RVlibs, type) {
+    if      (type === 'colTitle') {return RVlibs.columns.colTitle}
+    else if (type === 'region')   {return RVlibs.regions.city}
+    else if (type === 'cat')      {return RVlibs.cat    .cat}
+    else if (type === 'source')   {return RVlibs.sources}
+}
+function LIB_tryCity(RVlibs, city) {
+    let  ACcities = Object.keys (RVlibs.autocorr.region);   // имеющиеся варианты автозамены
+    let    check1 = LIST_inclStr(RVlibs.regions.city, city);
+    let    check2 = LIST_inclStr(ACcities, city.toLowerCase(), true, false);
+    return check1 || check2;
+}

@@ -16,7 +16,7 @@ function TCinit_fromLists(lists_dict) {
     for (let key of Object.keys(lists_dict)) {
         final.title[key] = lists_dict[key].shift(); // .shift() удаляет первый элемент и возвращает его
     }
-    if (!LIST_check_length_equal(Object.values(lists_dict))) {LOG('TCinit_diffLen')}
+    if (!LIST_check_lengthEqual(Object.values(lists_dict))) {LOG('TCinit_diffLen')}
 
     final.cells = COl_fromLists(lists_dict);
     return final;

@@ -43,3 +43,6 @@ function SLtoasts(type) {
     }
     return dict[type];
 }
+
+// узконаправленные
+function SL_oblShorts() {return ['обл.', 'обл', 'обл.)', 'обл)']}
