@@ -26,6 +26,17 @@ function LIST_inclStr(list, txt, fullText=true, lower=true) {
     }
     return false;
 }
+function LIST_searchItems(list, txt, type='item', fullText=true, lower=true) {
+    // type может быть 'item' (вернёт подходящие элементы списка) или 'index' (вернёт индексы)
+    let final = [];
+    for (let i=0; i < list.length; i++) {
+        if (STR_findSub(list[i], txt, 'bool', fullText, lower)) {
+            if (type === 'item') {final.push(list[i])}
+            else                 {final.push(i)}
+        }
+    }
+    return final;
+}
 
 // проверки
 function LIST_check_lengthEqual(list_ofLists) {

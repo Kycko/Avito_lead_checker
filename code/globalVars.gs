@@ -45,7 +45,9 @@ function Gtypes(type) {
 }
 function G_valTypes(type) { // validation types
     // readLib  : список подходящих вариантов будет прочитан из библиотеки
-    // checkList: для валидации будем смотреть, есть ли value в списке допустимых (extra)
+    // checkList: валидация путём проверки, есть ли value в списке допустимых (extra)
+    // forceCapt: если true, возвращаем из валидатора один вариант extra с правильной капитализацией
+    // (forceCapt пока убрал, сейчас везде работает, как =true; при необходимости потом добавить)
     let dict = {
         colTitle : {readLib: true,  checkList: true},
         region   : {readLib: true,  checkList: true},
@@ -64,6 +66,17 @@ function Gsheets() {
         sources  : '[script] источники[]',
         sugg     : '[script] предложения исправлений{{x:[]}}',  // sugg = suggestions
         autocorr : '[script] автоисправления{{x:y}}'
+    }
+}
+function Gcolors() {
+    return {
+        hl_lightGreen  : '#e4ffed', // hl = highlight
+        hlGreen        : '#93dfaf', // hl = highlight
+        hl_lightOrange : '#fce5cd', // hl = highlight
+        hlRed          : '#ea9999', // hl = highlight
+        hlYellow       : '#ffe599', // hl = highlight
+        black          : '#000000', // i.e. default font color
+        brdGrey        : '#cccccc', // brd = cell borders
     }
 }
 

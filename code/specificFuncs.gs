@@ -2,23 +2,22 @@
 
 // общие
 function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
-    // objTable = таблица[[{value:x, bgColor:y, note:z},...],...]
-    // errors   = список[{value:x, r:row, c:col, fixed:true/false}]
+    // objTable = таблица[[{value:x, bgColor:y, note:z, error:false},...],...]
+    // errors   = список [ {value:x, r:row, c:col, fixed:true/false},...]
     let errors = [];
 
     // autocorr и запись всех ошибок
     for (let r=0; r < objTable.length; r++) {
         for (let c=0; c < objTable[0].length; c++) {
             let tempValue = objTable[r][c].value;
-
             if (!justVerify) {tempValue = SPECautocorr(RV.libs, type, tempValue)}
 
-            if (SPEC_validateUD(RV.libs, type, tempValue)) {
-                objTable[r][c].value    = tempValue;
-                objTable[r][c].bg_color = Gcolors().hl_light_green;
-                errors[r].push(null);
+            let Vobj = SPEC_validateUD(RV.libs, type, tempValue);
+            if (Vobj.valid) {
+                objTable[r][c].value   = Vobj.value;
+                objTable[r][c].bgColor = Gcolors().hl_lightGreen;
             }
-            else {errors[r].push({value: objTable[r][c].value, fixed: false})}
+            else {errors.push({value: objTable[r][c].value, r: r, c: c, fixed: false})}
         }
     }
 
@@ -57,8 +56,12 @@ function SPEC_validateUD(RVlibs, type, value, extra=null) {
     let valObj = G_valTypes(type);
     if (valObj.readLib) {extra = LIB_get_validationList(RVlibs, type)}
 
-    if (valObj.checkList) {return LIST_inclStr(extra, value)}   // СДЕЛАТЬ ПОД ПРАВИЛЬНЫЕ СТРОЧНЫЕ/ПРОПИСНЫЕ
-    else                                {return null}
+    if (valObj.checkList) {
+        let found = LIST_searchItems(extra, value);
+        if (found.length) {return {valid: true,  value: found[0]}}
+        else              {return {valid: false, value: value}}
+    }
+    else {return null}  // пока не используется, потом дописать
 }
 
 // преобразование данных из Google-таблиц
