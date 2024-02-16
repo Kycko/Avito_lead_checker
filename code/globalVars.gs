@@ -1,4 +1,4 @@
-// инициализация RV (root vars) = {cur: {}, libs: {}, SD: null/true/false}
+// инициализация всякого, в т. ч. RV (root vars) = {cur: {}, libs: {}, SD: null/true/false}
 function Ginit_RV() {
     return {
         GTO  : {                            // Google tables objects
@@ -27,6 +27,7 @@ function Ginit_RVcur(ss) {
         CT          : []        // cell table [[{value:, bgColor:, note:, error:}, ...], ...]
     }
 }
+function GinitError(r, c) {return {fixed: false, newVal: null, pos: [{r:r, c:c}]}}
 
 // основные типы и листы
 function Gtypes(type) {

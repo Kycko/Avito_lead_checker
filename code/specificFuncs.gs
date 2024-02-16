@@ -3,32 +3,30 @@
 // общие
 function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
     // objTable = таблица[[{value:x, bgColor:y, note:z, error:false},...],...]
-    // errors   = список [ {value:x, r:row, c:col, fixed:true/false},...]
-    let errors = [];
+    let errors = {};    // внутри ключи initValue:{fixed:t/f, newVal:null, pos:[{r:row, c:col},...]}
 
     // autocorr и запись всех ошибок
     for (let r=0; r < objTable.length; r++) {
         for (let c=0; c < objTable[0].length; c++) {
-            let tempValue = objTable[r][c].value;
-            if (!justVerify) {tempValue = SPECautocorr(RV.libs, type, tempValue)}
+            let    cell = objTable[r][c];
+            let tempVal = cell.value;
+            if (!justVerify) {tempVal = SPECautocorr(RV.libs, type, tempVal)}
 
-            let Vobj = SPECvalidate_andCapitalize(RV.libs, type, tempValue, justVerify);
+            let Vobj = SPECvalidate_andCapitalize(RV.libs, type, tempVal, justVerify);
             if (Vobj.valid) {
-                objTable[r][c].value   = Vobj.value;
-                objTable[r][c].bgColor = Gcolors().hl_lightGreen;
+                cell.value   = Vobj.value;
+                cell.bgColor = Gcolors().hl_lightGreen;
             }
             else {
-                objTable[r][c].error = true;
-                errors.push({value: objTable[r][c].value, r: r, c: c, fixed: false});
+                if (Object.keys(errors).includes(cell.value)) {errors[cell.value].pos.push({r:r, c:c})}
+                else                                          {errors[cell.value] = GinitError(r, c)}
             }
         }
     }
 
     // предложение исправить вручную и запись исправлений
-    errors    = SPEC_ask_SD_and_sugg(RV, errors, type);
-    objTable = SPEC_finalize_errors(objTable,  errors);
-
-    return {SD: RV.SD, table: objTable};
+    if (RV.SD !== false) {SPEC_askSD_andSugg(RV, errors, type)}
+    SPEC_finalize_errors(objTable,  errors);
 }
 
 // обработка столбцов
