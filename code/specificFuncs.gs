@@ -12,12 +12,15 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
             let tempValue = objTable[r][c].value;
             if (!justVerify) {tempValue = SPECautocorr(RV.libs, type, tempValue)}
 
-            let Vobj = SPEC_validateUD(RV.libs, type, tempValue);
+            let Vobj = SPECvalidate_andCapitalize(RV.libs, type, tempValue, justVerify);
             if (Vobj.valid) {
                 objTable[r][c].value   = Vobj.value;
                 objTable[r][c].bgColor = Gcolors().hl_lightGreen;
             }
-            else {errors.push({value: objTable[r][c].value, r: r, c: c, fixed: false})}
+            else {
+                objTable[r][c].error = true;
+                errors.push({value: objTable[r][c].value, r: r, c: c, fixed: false});
+            }
         }
     }
 
@@ -51,17 +54,25 @@ function SPECautocorr(RVlibs, type, from) {
     }
     return LIB_getAutocorr(RVlibs.autocorr, type, from).value;
 }
-function SPEC_validateUD(RVlibs, type, value, extra=null) {
+function SPECvalidate_andCapitalize(RVlibs, type, value, justVerify=false, extra=null) {
     // в extra можно передать любые необходимые доп. данные
     let valObj = G_valTypes(type);
     if (valObj.readLib) {extra = LIB_get_validationList(RVlibs, type)}
+    let final = {valid: null, value: value};
 
     if (valObj.checkList) {
-        let found = LIST_searchItems(extra, value);
-        if (found.length) {return {valid: true,  value: found[0]}}
-        else              {return {valid: false, value: value}}
+        if (justVerify) {final.valid = LIST_inclStr(extra, value, true, false)}
+        else {
+            let found = LIST_searchItems(extra, value);
+            final.valid = Boolean(found.length);
+            if (final.valid) {final.value = found[0]}
+        }
     }
-    else {return null}  // пока не используется, потом дописать
+    else {null} // пока не используется, потом дописать
+
+    return final;
+}
+    }
 }
 
 // преобразование данных из Google-таблиц
