@@ -70,7 +70,54 @@ function SPECvalidate_andCapitalize(RVlibs, type, value, justVerify=false, extra
 
     return final;
 }
+function SPEC_askSD_andSugg(RV, errors, type) {
+    let count = Object.keys(errors).length;
+    if (count > 1 && RV.SD === null)  {UI_ask_showDialogues(RV)}
+    // нужно проверять RV.SD !== false на случай, если в диалоге выбрано 'Нет'
+    if (count     && RV.SD !== false) {SPEC_sugg_invalidUD(RV.libs, type, errors)}
+}
+function SPEC_sugg_invalidUD(RVlibs, type, errors) {
+    // errors = {error1:GinitError(), error2:{}, ...}
+    let     USI = {};   // USI = user input = {ЧТО_ИСПРАВЛЯЕМ: {new: НА_ЧТО, fixed: было ли исправление валидно}}
+    let errKeys = Object.keys(errors);
+    let counter = {cur: 0, total: errKeys.length}
+
+    // ОТСЮДА ДАЛЬШЕ
+
+    for (let r=0; r < errors.length; r++) {
+        for (let c=0; c < errors[0].length; c++) {
+            let cur_error = errors[r][c];
+            if (cur_error !== null) {
+                if (Object.keys(USI).includes(cur_error.value)) {
+                    cur_error.fixed = USI[cur_error.value].fixed;
+                    cur_error.value = USI[cur_error.value].new;
+                }
+                else {
+                    counter.cur++;
+                    let     valid = false;
+                    let sugg_list = SPEC_get_sugg(RVlibs, type, cur_error.value);
+
+                    while (!valid) {
+                        let resp = UI_sugg_invalid_UD(type, cur_error.value, sugg_list, counter);
+                        if (resp.OK_clicked) {
+                            // здесь передать sugg_list нужно только для type='vert'
+                            valid = SPEC_validate_UD(RVlibs, type, resp.input, sugg_list);
+                            if (valid) {
+                                USI[cur_error.value] = {new: resp.input, fixed: true}
+                                cur_error.value      = resp.input;
+                                cur_error.fixed      = true;
+                            }
+                        }
+                        else {
+                            USI[cur_error.value] = {new: cur_error.value, fixed: false}
+                            valid                = true;
+                        }
+                    }
+                }
+            }
+        }
     }
+    return errors;
 }
 
 // преобразование данных из Google-таблиц

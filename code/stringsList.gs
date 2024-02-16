@@ -21,6 +21,10 @@ function SLlogger(type) {
 }
 function SL_UImessages(type) {
     const dict = {
+        MM_showDialogues: {
+            title : 'Предлагать сразу исправлять ошибки?',
+            text  : 'Если нет, диалоговые окна не будут появляться, а все ошибки будут подсвечены красным.'
+        },
         noSheets_msg: {
             noReqs_title   : 'Невозможно выполнить',
             NAsheets_titles: {

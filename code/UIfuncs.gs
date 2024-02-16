@@ -50,3 +50,4 @@ function UI_noSheets_msg(RV, noSheets_title, reqLIB_ready) {
 
     UI_showMsg(RV.GTO.ui, finalMsg);
 }
+function UI_ask_showDialogues(RV) {RV.SD = UI_msg_fromSL(RV.GTO.ui, 'MM_showDialogues', 'question')}
