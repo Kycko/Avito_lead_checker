@@ -13,10 +13,7 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
             if (!justVerify) {tempVal = SPECautocorr(RV.libs, type, tempVal)}
 
             let Vobj = SPECvalidate_andCapitalize(RV.libs, type, tempVal, justVerify);
-            if (Vobj.valid) {
-                cell.value   = Vobj.value;
-                cell.bgColor = Gcolors().hl_lightGreen;
-            }
+            if (Vobj.valid) {CO_set_errorStatus(cell, false, Vobj.value)}
             else {
                 let low = cell.value.toLowerCase();
                 if (Object.keys(errors).includes(low)) {errors[low].pos.push({r:r, c:c})}
@@ -108,14 +105,7 @@ function SPEC_getSugg(RVlibs, type, value) {
 function SPEC_finalizeErrors(objTable, errors) {
     for (let err of Object.values(errors)) {
         for (let pos of err.pos) {
-            if (err.fixed) {
-                objTable[pos.r][pos.c].value   = err.newVal;
-                objTable[pos.r][pos.c].bgColor = Gcolors().hl_lightGreen;
-            }
-            else {
-                objTable[pos.r][pos.c].error   = true;
-                objTable[pos.r][pos.c].bgColor = Gcolors().hlRed;
-            }
+            CO_set_errorStatus(objTable[pos.r][pos.c], err.fixed, err.newVal);
         }
     }
 }

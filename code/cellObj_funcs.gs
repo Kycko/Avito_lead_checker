@@ -24,6 +24,19 @@ function COt_fromTables(tables) {
     return final;
 }
 
+// общие
+function CO_set_errorStatus(CO, error, value) {
+    // error = true/false
+    if (error) {
+        CO.error   = true;
+        CO.bgColor = Gcolors().hlRed;
+    }
+    else {
+        CO.value   = value;
+        CO.bgColor = Gcolors().hl_lightGreen;
+    }
+}
+
 // преобразование в таблицы для записи на лист
 function COt_toTables(COtable, types=['value', 'bgColor', 'note']) {
     let final = {};
