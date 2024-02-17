@@ -30,7 +30,7 @@ function Ginit_RVcur(ss) {
 function GinitError(r, c) {return {fixed: false, newVal: null, pos: [{r:r, c:c}]}}
 
 // основные типы и листы
-function Gtypes(type) {
+function G_launchTypes(type) {
     // библиотека columns НУЖНА ВСЕГДА, когда преобразуем SPEC_cur_toTD()
     // (для распознавания столбцов ещё на этапе чтения данных)
     let NAtitles = SL_UImessages('noSheets_msg').NAsheets_titles;
@@ -44,17 +44,34 @@ function Gtypes(type) {
     }
     return dict[type];
 }
-function G_valTypes(type) { // validation types
-    // readLib  : список подходящих вариантов будет прочитан из библиотеки
-    // checkList: валидация путём проверки, есть ли value в списке допустимых (extra)
-    // forceCapt: если true, возвращаем из валидатора один вариант extra с правильной капитализацией
-    // (forceCapt пока убрал, сейчас везде работает, как =true; при необходимости потом добавить)
+function G_UDtypes(type) { // user data types
+    // ПОТОМ СВЕРИТЬ, ЗДЕСЬ ДОЛЖНЫ БЫТЬ ВСЕ ТИПЫ ИЗ Gkeys_AC_sugg()
     let dict = {
-        colTitle : {readLib: true,  checkList: true},
-        region   : {readLib: true,  checkList: true},
-        cat      : {readLib: true,  checkList: true},
-        source   : {readLib: true,  checkList: true},
-        vert     : {readLib: false, checkList: true}
+        colTitle: {
+            readLib   : true,   // список подходящих вариантов будет прочитан из библиотеки
+            checkList : true,   // валидация путём проверки, есть ли value в списке допустимых (extra)
+            suggMsg   : {acceptBlank: false, gend: 'neutral'}   // для диалога UI_sugg_invalidUD()
+        },
+        region: {
+            readLib   : true,
+            checkList : true,
+            suggMsg   : {acceptBlank: false, gend: 'male'}
+        },
+        cat: {
+            readLib   : true,
+            checkList : true,
+            suggMsg   : {acceptBlank: false, gend: 'female'}
+        },
+        vert: {
+            readLib   : false,
+            checkList : true,
+            suggMsg   : {acceptBlank: false, gend: 'female'}
+        },
+        source: {
+            readLib   : true,
+            checkList : true,
+            suggMsg   : {acceptBlank: false, gend: 'male'}
+        }
     }
     return dict[type];
 }

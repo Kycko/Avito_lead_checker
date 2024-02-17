@@ -6,10 +6,10 @@ function getIB(type, index) {
 }
 function LOG(type, extra=null) {
     // в extra можно передать любые необходимые доп. данные
-    if (type === 'AC_sugg_noKey' && extra.keys.length > 1) {type += 's'}
+    if (type === 'ACsugg_noKey' && extra.keys.length > 1) {type += 's'}
     let msg = SLlogger(type);
 
-    if (type.includes('AC_sugg_noKey')) {
+    if (type.includes('ACsugg_noKey')) {
         msg = msg.replace('$$1', extra.keys).replace('$$2', extra.sheet);
     }
     else if (extra !== null) {msg = msg.replace('$$1', extra)}

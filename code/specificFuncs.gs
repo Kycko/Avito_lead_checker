@@ -18,8 +18,9 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
                 cell.bgColor = Gcolors().hl_lightGreen;
             }
             else {
-                if (Object.keys(errors).includes(cell.value)) {errors[cell.value].pos.push({r:r, c:c})}
-                else                                          {errors[cell.value] = GinitError(r, c)}
+                let low = cell.value.toLowerCase();
+                if (Object.keys(errors).includes(low)) {errors[low].pos.push({r:r, c:c})}
+                else                                   {errors[low] = GinitError(r, c)}
             }
         }
     }
@@ -54,7 +55,7 @@ function SPECautocorr(RVlibs, type, from) {
 }
 function SPECvalidate_andCapitalize(RVlibs, type, value, justVerify=false, extra=null) {
     // в extra можно передать любые необходимые доп. данные
-    let valObj = G_valTypes(type);
+    let valObj = G_UDtypes(type);
     if (valObj.readLib) {extra = LIB_get_validationList(RVlibs, type)}
     let final = {valid: null, value: value};
 
@@ -74,50 +75,35 @@ function SPEC_askSD_andSugg(RV, errors, type) {
     let count = Object.keys(errors).length;
     if (count > 1 && RV.SD === null)  {UI_ask_showDialogues(RV)}
     // нужно проверять RV.SD !== false на случай, если в диалоге выбрано 'Нет'
-    if (count     && RV.SD !== false) {SPEC_sugg_invalidUD(RV.libs, type, errors)}
+    if (count     && RV.SD !== false) {SPEC_sugg_invalidUD(RV, type, errors)}
 }
-function SPEC_sugg_invalidUD(RVlibs, type, errors) {
+function SPEC_sugg_invalidUD(RV, type, errors) {
     // errors = {error1:GinitError(), error2:{}, ...}
-    let     USI = {};   // USI = user input = {ЧТО_ИСПРАВЛЯЕМ: {new: НА_ЧТО, fixed: было ли исправление валидно}}
     let errKeys = Object.keys(errors);
     let counter = {cur: 0, total: errKeys.length}
+    for (let key of errKeys) {
+        counter.cur++;
+        let  suggList = SPEC_getSugg(RV.libs, type, key);
+        let stopWhile = false;
 
-    // ОТСЮДА ДАЛЬШЕ
-
-    for (let r=0; r < errors.length; r++) {
-        for (let c=0; c < errors[0].length; c++) {
-            let cur_error = errors[r][c];
-            if (cur_error !== null) {
-                if (Object.keys(USI).includes(cur_error.value)) {
-                    cur_error.fixed = USI[cur_error.value].fixed;
-                    cur_error.value = USI[cur_error.value].new;
-                }
-                else {
-                    counter.cur++;
-                    let     valid = false;
-                    let sugg_list = SPEC_get_sugg(RVlibs, type, cur_error.value);
-
-                    while (!valid) {
-                        let resp = UI_sugg_invalid_UD(type, cur_error.value, sugg_list, counter);
-                        if (resp.OK_clicked) {
-                            // здесь передать sugg_list нужно только для type='vert'
-                            valid = SPEC_validate_UD(RVlibs, type, resp.input, sugg_list);
-                            if (valid) {
-                                USI[cur_error.value] = {new: resp.input, fixed: true}
-                                cur_error.value      = resp.input;
-                                cur_error.fixed      = true;
-                            }
-                        }
-                        else {
-                            USI[cur_error.value] = {new: cur_error.value, fixed: false}
-                            valid                = true;
-                        }
-                    }
+        while (!stopWhile) {
+            let resp = UI_sugg_invalidUD(RV.GTO.ui, type, key, suggList, counter);
+            if (resp.OKclicked) {
+                // здесь передать suggList нужно только для type='vert'
+                let valObj = SPECvalidate_andCapitalize(RV.libs, type, resp.input, false, suggList);
+                if (valObj.valid) {
+                    errors[key].fixed  = true;
+                    errors[key].newVal = valObj.value;
+                    stopWhile          = true;
                 }
             }
+            else {stopWhile = true}
         }
     }
-    return errors;
+}
+function SPEC_getSugg(RVlibs, type, value) {
+    if (type === 'vert') {return LIBvlookup_multi(RVlibs.cat, value, 'cat', 'vert')}
+    else                 {return LIB_getSugg     (RVlibs, type, value)}
 }
 
 // преобразование данных из Google-таблиц

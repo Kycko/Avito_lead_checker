@@ -51,3 +51,30 @@ function UI_noSheets_msg(RV, noSheets_title, reqLIB_ready) {
     UI_showMsg(RV.GTO.ui, finalMsg);
 }
 function UI_ask_showDialogues(RV) {RV.SD = UI_msg_fromSL(RV.GTO.ui, 'MM_showDialogues', 'question')}
+function UI_sugg_invalidUD(ui, type, initVal, suggList, counter) {
+    const strings = SL_UImessages('sugg_invalidUD');
+    const    Tobj = G_UDtypes    (type);    // type object
+    let  finalMsg = {};
+
+    // title
+    let title = DICT_get_key_by_string_value(Gautocorr_and_sugg_keys(), type);
+    finalMsg['title']  = strings.title[Tobj.suggMsg.gend] + ' ' + title;
+    finalMsg['title'] += ' (' + counter.cur + ' из ' + counter.total + ')';
+
+    // msg
+    let RPL = {'3': initVal};   // RPL = replace
+    if (Tobj.suggMsg.acceptBlank) {RPL['1'] = strings.txt.acceptBlank}
+    else                          {RPL['1'] = ''}
+    if (type === 'vert')          {RPL['2'] = strings.txt.catVert}
+    else                          {RPL['2'] = strings.txt.anotherTypes}
+    finalMsg['text'] = strings.txt.main;
+    for (let num of Object.keys(RPL)) {finalMsg.text = finalMsg.text.replace('$$'+num, RPL[num])}
+
+    if (suggList.length) {
+        finalMsg.text += strings.offers;
+        for (let sugg of suggList) {finalMsg.text += '• ' + sugg + '\n'}
+        finalMsg.text += '\n';
+    }
+
+    return UI_showMsg(ui, finalMsg, 'input');
+}

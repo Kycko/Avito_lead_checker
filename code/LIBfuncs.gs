@@ -2,10 +2,10 @@
 
 // общие
 function LIB_filter_toRead(RVlibs, toRead) {
-    let    final = [];
-    let cur_libs = Object.keys(RVlibs);
+    let   final = [];
+    let curLibs = Object.keys(RVlibs);
     for (let lib of toRead) {
-        if (!cur_libs.includes(lib) && !RVlibs.NSF.includes(lib)) {final.push(lib)}
+        if (!curLibs.includes(lib) && !RVlibs.NSF.includes(lib)) {final.push(lib)}
     }
     return final;
 }
@@ -16,6 +16,21 @@ function LIBready(RVlibs, reqs) {
         if (!cur_libs.includes(lib)) {return false}
     }
     return true;
+}
+function LIBvlookup_multi(lib, request, searchCol, resultCol, fullText=true, lower=true, rmDoubles=true) {
+    // request может быть одной строкой либо списком
+    let final = [];
+    if (typeof request === 'string') {request = [request]}
+
+    for (let item of request) {
+        let indexes = LIST_searchItems(lib[searchCol], item, 'index', fullText, lower);
+        for (let i of indexes) {
+            if (!rmDoubles || !LIST_inclStr(final, lib[resultCol][i], fullText, lower)) {
+                final.push(lib[resultCol][i]);
+            }
+        }
+    }
+    return final;
 }
 
 // создание
@@ -64,7 +79,7 @@ function LIBinit_AC_sugg(table, pinned, type) {
         else if (!NAkeys.includes(row[0])) {NAkeys.push(row[0])}
     }
 
-    if (NAkeys.length) {LOG('AC_sugg_noKey', {keys: NAkeys, sheet: Gsheets()[type]})}
+    if (NAkeys.length) {LOG('ACsugg_noKey', {keys: NAkeys, sheet: Gsheets()[type]})}
     return final;
 }
 function LIBinit_columns(table, pinned) {
@@ -99,6 +114,15 @@ function LIB_get_validationList(RVlibs, type) {
     else if (type === 'region')   {return RVlibs.regions.city}
     else if (type === 'cat')      {return RVlibs.cat    .cat}
     else if (type === 'source')   {return RVlibs.sources}
+}
+function LIB_getSugg(RVlibs, type, value) {
+    let final = [];
+    for (let libKey of ['sugg', 'autocorr']) {
+        for (let from of Object.keys(RVlibs[libKey][type])) {
+            if (STR_findSub(value, from, 'bool')) {final = final.concat(RVlibs[libKey][type][from])}
+        }
+    }
+    return LIST_rmDoubles(final);
 }
 function LIB_tryCity(RVlibs, city) {
     let  ACcities = Object.keys (RVlibs.autocorr.region);   // имеющиеся варианты автозамены

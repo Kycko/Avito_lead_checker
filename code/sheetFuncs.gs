@@ -13,7 +13,7 @@ function SH_readAll(RV, type, range, toTD) {
     // при range=null загружаем весь лист, иначе передаём объект range текущего листа
 
     // библиотеки
-    const typeObj = Gtypes(type);
+    const typeObj = G_launchTypes    (type);
     const  toRead = LIB_filter_toRead(RV.libs, typeObj.readSheets);
     for (let lib of toRead) {SH_readLib(RV, lib)}
     let reqLIB_ready = LIBready(RV.libs, typeObj.launchReqs);
