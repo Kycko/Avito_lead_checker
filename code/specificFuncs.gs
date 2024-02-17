@@ -28,15 +28,15 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
 }
 
 // обработка столбцов
-function SPEC_unk_toCur_onRead(RV) {
+function SPEC_unk_toCur(RV, justVerify=false) {
     let Tobjects = [];  // title objects
     for (let TC of RV.cur.TD.unk) {Tobjects.push(TC.title)}
 
-    let result = SPEC_check_UDrange([Tobjects], 'colTitle', RV, true);
-    RV.SD    = result.SD;
-    for (let i=0; i < keys.length; i++) {
-        RV.unknown[keys[i]].title = result.table[0][i];
-        if (result.table[0][i].bg_color === Gcolors().hl_light_green) {RV = SPEC_accept_valid_column(RV, keys[i])}
+    SPEC_check_UDrange([Tobjects], 'colTitle', RV, justVerify);
+    for (let TC of RV.cur.TD.unk) {
+        if (!TC.title.error) {
+            // ДОДЕЛАТЬ ЗДЕСЬ
+        }
     }
 }
 

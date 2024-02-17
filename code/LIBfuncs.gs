@@ -96,7 +96,6 @@ function LIBinit_columns(table, pinned) {
             }
             final[row[0]][props[i]] = value;
         }
-
     }
     return final;
 }

@@ -38,8 +38,8 @@ function SH_readCur(RV, range, toTD) {
     SH_read_initTables(RV.cur.TBL, range);
 
     if (toTD) {
-        SPEC_cur_toTD        (RV.cur);
-        SPEC_unk_toCur_onRead(RV);
+        SPEC_cur_toTD (RV.cur);
+        SPEC_unk_toCur(RV, true);
     }
     else {
         let  init = RV.cur.TBL.init;
