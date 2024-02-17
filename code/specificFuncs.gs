@@ -27,7 +27,7 @@ function SPEC_check_UDrange(objTable, type, RV, justVerify=false) {
 
     // предложение исправить вручную и запись исправлений
     if (RV.SD !== false) {SPEC_askSD_andSugg(RV, errors, type)}
-    SPEC_finalize_errors(objTable,  errors);
+    SPEC_finalizeErrors(objTable, errors);
 }
 
 // обработка столбцов
@@ -104,6 +104,20 @@ function SPEC_sugg_invalidUD(RV, type, errors) {
 function SPEC_getSugg(RVlibs, type, value) {
     if (type === 'vert') {return LIBvlookup_multi(RVlibs.cat, value, 'cat', 'vert')}
     else                 {return LIB_getSugg     (RVlibs, type, value)}
+}
+function SPEC_finalizeErrors(objTable, errors) {
+    for (let err of Object.values(errors)) {
+        for (let pos of err.pos) {
+            if (err.fixed) {
+                objTable[pos.r][pos.c].value   = err.newVal;
+                objTable[pos.r][pos.c].bgColor = Gcolors().hl_lightGreen;
+            }
+            else {
+                objTable[pos.r][pos.c].error   = true;
+                objTable[pos.r][pos.c].bgColor = Gcolors().hlRed;
+            }
+        }
+    }
 }
 
 // преобразование данных из Google-таблиц
